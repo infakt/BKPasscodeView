@@ -96,6 +96,12 @@ static BKPasscodeLockScreenManager *_sharedManager;
     dummyViewController.delegate = self;
 }
 
+- (void) hideLockScreen
+{
+    self.lockScreenWindow.hidden = YES;
+    self.lockScreenWindow = nil;
+}
+
 - (void)dummyViewControllerWillAppear:(BKPasscodeDummyViewController *)aViewController
 {
     // remove blind view

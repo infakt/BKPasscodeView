@@ -27,6 +27,7 @@
  */
 - (void)showLockScreen:(BOOL)animated;
 
+- (void)hideLockScreen;
 @end
 
 
