@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) NSMutableString       *mutablePasscode;
 @property (strong, nonatomic) NSRegularExpression   *nonDigitRegularExpression;
+@property CGFloat strokeWidth;
 
 @end
 
@@ -53,6 +54,7 @@
     _dotColor = [UIColor blackColor];
     
     self.backgroundColor = [UIColor clearColor];
+    _strokeWidth = 1;
     
     _mutablePasscode = [[NSMutableString alloc] initWithCapacity:4];
     
@@ -187,8 +189,8 @@
 
 - (CGSize)contentSize
 {
-    return CGSizeMake(self.maximumLength * _dotSize.width + (self.maximumLength - 1) * _dotSpacing,
-                      _dotSize.height);
+    return CGSizeMake(self.maximumLength * _dotSize.width + (self.maximumLength - 1) * _dotSpacing + 2 * _strokeWidth,
+                      _dotSize.height + 2 * _strokeWidth);
 }
 
 - (void)setFrame:(CGRect)frame
@@ -201,8 +203,8 @@
 {
     CGSize contentSize = [self contentSize];
     
-    CGPoint origin = CGPointMake(floorf((self.frame.size.width - contentSize.width) * 0.5f),
-                                 floorf((self.frame.size.height - contentSize.height) * 0.5f));
+    CGPoint origin = CGPointMake(ceilf((self.frame.size.width - contentSize.width + _strokeWidth) * 0.5f),
+                                 ceilf((self.frame.size.height - contentSize.height + _strokeWidth) * 0.5f));
     
     if ([self.imageSource respondsToSelector:@selector(passcodeField:dotImageAtIndex:filled:)]) {
         
@@ -229,7 +231,9 @@
     } else {
         
         CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetFillColorWithColor(context, self.dotColor.CGColor);
+        CGContextSetFillColorWithColor(context, [UIColor blackColor].CGColor);
+        CGContextSetStrokeColorWithColor(context, self.dotColor.CGColor);
+        CGContextSetLineWidth(context, _strokeWidth);
         
         for (NSUInteger i = 0; i < self.maximumLength; i++) {
             
@@ -239,9 +243,12 @@
                 CGContextFillEllipseInRect(context, circleFrame);
             } else {
                 // draw line
-                CGRect lineFrame = CGRectMake(origin.x, origin.y + floorf((self.dotSize.height - self.lineHeight) * 0.5f),
-                                              self.dotSize.width, self.lineHeight);
-                CGContextFillRect(context, lineFrame);
+//                CGRect lineFrame = CGRectMake(origin.x, origin.y + floorf((self.dotSize.height - self.lineHeight) * 0.5f),
+//                                              self.dotSize.width, self.lineHeight);
+//                CGContextFillRect(context, lineFrame);
+                
+                CGRect circleFrame = CGRectMake(origin.x, origin.y, self.dotSize.width, self.dotSize.height);
+                CGContextStrokeEllipseInRect(context, circleFrame);
             }
             
             origin.x += (self.dotSize.width + self.dotSpacing);
