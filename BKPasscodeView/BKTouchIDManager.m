@@ -174,16 +174,16 @@ static NSString *const BKTouchIDManagerTouchIDEnabledAccountName = @"enabled";
 {
     // try to update first
     BOOL success = [self updateKeychainItemWithServiceName:serviceName accountName:accountName data:data];
-    
-    if (success) {
-        return YES;
-    }
-    
-    // try deleting when update failed (workaround for iOS 8 bug)
-    [self deleteKeychainItemWithServiceName:serviceName accountName:accountName];
-    
-    // try add
-    return [self addKeychainItemWithServiceName:serviceName accountName:accountName data:data sacFlags:sacFlags];
+    return success
+//    if (success) {
+//        return YES;
+//    }
+//    
+//    // try deleting when update failed (workaround for iOS 8 bug)
+//    [self deleteKeychainItemWithServiceName:serviceName accountName:accountName];
+//    
+//    // try add
+//    return [self addKeychainItemWithServiceName:serviceName accountName:accountName data:data sacFlags:sacFlags];
 }
 
 + (BOOL)addKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName data:(NSData *)data sacFlags:(SecAccessControlCreateFlags)sacFlags
