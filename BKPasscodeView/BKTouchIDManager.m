@@ -174,7 +174,7 @@ static NSString *const BKTouchIDManagerTouchIDEnabledAccountName = @"enabled";
 {
     // try to update first
     BOOL success = [self updateKeychainItemWithServiceName:serviceName accountName:accountName data:data];
-    return success
+    return success;
 //    if (success) {
 //        return YES;
 //    }
