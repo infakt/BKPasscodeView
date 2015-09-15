@@ -173,8 +173,13 @@ static NSString *const BKTouchIDManagerTouchIDEnabledAccountName = @"enabled";
 + (BOOL)saveKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName data:(NSData *)data sacFlags:(SecAccessControlCreateFlags)sacFlags
 {
     // try to update first
-    BOOL success = [self updateKeychainItemWithServiceName:serviceName accountName:accountName data:data];
-    return success;
+    OSStatus status = [self updateKeychainItemWithServiceName:serviceName accountName:accountName data:data];
+    if (status == errSecItemNotFound) {
+        if ([self addKeychainItemWithServiceName:serviceName accountName:accountName data:data sacFlags:sacFlags]) {
+            status = [self updateKeychainItemWithServiceName:serviceName accountName:accountName data:data];
+        }
+    }
+    return status == errSecSuccess;
 //    if (success) {
 //        return YES;
 //    }
@@ -209,7 +214,7 @@ static NSString *const BKTouchIDManagerTouchIDEnabledAccountName = @"enabled";
     return (status == errSecSuccess);
 }
 
-+ (BOOL)updateKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName data:(NSData *)data
++ (OSStatus)updateKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName data:(NSData *)data
 {
     NSDictionary *query = @{ (__bridge id)kSecClass: (__bridge id)kSecClassGenericPassword,
                              (__bridge id)kSecAttrService: serviceName,
@@ -219,7 +224,7 @@ static NSString *const BKTouchIDManagerTouchIDEnabledAccountName = @"enabled";
     
     OSStatus status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)changes);
     
-    return (status == errSecSuccess);
+    return status;
 }
 
 + (BOOL)deleteKeychainItemWithServiceName:(NSString *)serviceName accountName:(NSString *)accountName
