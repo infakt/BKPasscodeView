@@ -18,12 +18,21 @@ typedef enum : NSUInteger {
     BKPasscodeViewControllerCheckPasscodeType
 } BKPasscodeViewControllerType;
 
+
+typedef enum : NSUInteger {
+    BKPasscodeViewControllerStateUnknown,
+    BKPasscodeViewControllerStateCheckPassword,
+    BKPasscodeViewControllerStateInputPassword,
+    BKPasscodeViewControllerStateReinputPassword
+} BKPasscodeViewControllerState;
+
 @protocol BKPasscodeViewControllerDelegate;
 
 @interface BKPasscodeViewController : UIViewController <BKPasscodeInputViewDelegate, BKTouchIDSwitchViewDelegate>
 
 @property (nonatomic, weak) id<BKPasscodeViewControllerDelegate> delegate;
 
+@property (nonatomic) BKPasscodeViewControllerState             currentState;
 @property (nonatomic) BKPasscodeViewControllerType              type;
 @property (nonatomic) BKPasscodeInputViewPasscodeStyle          passcodeStyle;
 @property (nonatomic) UIKeyboardType                            keyboardType;
