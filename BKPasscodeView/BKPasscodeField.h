@@ -47,6 +47,8 @@
  */
 - (BOOL)passcodeFieldShouldDeleteBackward:(BKPasscodeField *)aPasscodeField;
 
+- (BOOL)canPasscodeFieldBecomeFirstResponder;
+
 @end
 
 

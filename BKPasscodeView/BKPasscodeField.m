@@ -265,6 +265,10 @@
 
 - (BOOL)canBecomeFirstResponder
 {
+    if ([self.delegate respondsToSelector:@selector(canPasscodeFieldBecomeFirstResponder)]) {
+        return [self.delegate canPasscodeFieldBecomeFirstResponder];
+    }
+    
     return YES;
 }
 
